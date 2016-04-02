@@ -118,7 +118,7 @@ public class MainFlowerActivity extends AppCompatActivity {
         Toast t = Toast.makeText(this.getApplicationContext(), "this button doesn't do anything :(", Toast.LENGTH_SHORT);
         t.show();
 
-        flowerView.canvas.drawOval(100, 100, 200, 200, new Paint(Color.BLUE));
+        //flowerView.canvas.drawOval(100, 100, 200, 200, new Paint(Color.BLUE));
 
         /*
         //flowerView.setMakeNewCanvas(false);
