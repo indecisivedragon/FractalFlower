@@ -44,17 +44,21 @@ public class FlowerView extends SurfaceView {
 
     FlowerView(Context context) {
         super(context);
+        resetBufferCanvas();
     }
 
     @Override
     public void onDraw(Canvas c) {
         super.onDraw(c);
 
+        height = getHeight();
+        width = getWidth();
+
         //set bitmap and draw to canvas
         //canvas = c;
         //init(c);
 
-        //c.drawBitmap(bitmap, 0, 0, paint);
+        c.drawBitmap(bufferBitmap, 0, 0, paint);
 
         /*
         if (addFlower) {
@@ -128,13 +132,24 @@ public class FlowerView extends SurfaceView {
     }
 
     public void resetBufferCanvas() {new Canvas();
-        Bitmap bufferBitmap = Bitmap.createBitmap(height, width, Bitmap.Config.RGB_565);
+        bufferBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
         bufferCanvas = new Canvas(bufferBitmap);
         bufferCanvas.drawColor(Color.WHITE);
     }
 
     public void addFlower() {
-        Flower.drawFlower(bufferCanvas, flowers.get(0));
+        flowers.add(new Flower(10));
+        for (int i=0; i<flowers.size(); i++) {
+            int dx = widthPadding + rand.nextInt(width - 2 * widthPadding);
+            int dy = heightPadding + rand.nextInt(height - 2 * heightPadding);
+
+            bufferCanvas.save();
+            bufferCanvas.translate(dx, dy);
+
+            Flower.drawFlower(bufferCanvas, flowers.get(i));
+
+            bufferCanvas.restore();
+        }
     }
 
     /*

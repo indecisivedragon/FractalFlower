@@ -84,7 +84,7 @@ public class MainFlowerActivity extends AppCompatActivity {
         flowerView = new FlowerView(this);
         flowerView.setBackgroundColor(Color.WHITE);
 
-        flowerView.resetBufferCanvas();
+        // flowerView.resetBufferCanvas();
 
         layout.addView(flowerView);
     }
