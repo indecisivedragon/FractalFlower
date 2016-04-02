@@ -83,6 +83,9 @@ public class MainFlowerActivity extends AppCompatActivity {
     public void drawCanvas(LinearLayout layout) {
         flowerView = new FlowerView(this);
         flowerView.setBackgroundColor(Color.WHITE);
+
+        flowerView.resetBufferCanvas();
+
         layout.addView(flowerView);
     }
 
@@ -92,10 +95,15 @@ public class MainFlowerActivity extends AppCompatActivity {
      * @param view
      */
     public void clearCanvas(View view) {
+        flowerView.resetBufferCanvas();
+        flowerView.invalidate();
+
+        /*
         //don't save the current canvas and redraw
         flowerView.setMakeNewCanvas(true);
         flowerView.setAddFlower(false);
         flowerView.invalidate();
+        */
     }
 
     /**
@@ -103,6 +111,10 @@ public class MainFlowerActivity extends AppCompatActivity {
      * @param view
      */
     public void generateCanvas(View view) {
+        flowerView.addFlower();
+        flowerView.invalidate();
+
+        /*
         //save the current canvas and don't refresh
         Bitmap bitmap = flowerView.getBitmap();
         flowerView.setMakeNewCanvas(false);
@@ -111,6 +123,7 @@ public class MainFlowerActivity extends AppCompatActivity {
         flowerView.setBitmap(bitmap);
         flowerView.setAddFlower(true);
         flowerView.invalidate();
+        */
     }
 
 
