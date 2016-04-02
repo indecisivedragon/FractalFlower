@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Fractal Flower</string>
+    <string name="clearCanvasButtonText">Clear</string>
+    <string name="generateCanvasButtonText">Generate</string>
+    <string name="addCanvasButtonText">Add</string>
+
+
+    <string name="action_settings">Settings</string>
+
+
+    <string name="title_activity_display_settings">DisplaySettingsActivity</string>
+    <string name="setCenterPetalsText">Center</string>
+    <string name="setColorSpinnerText">Color</string>
+    <string-array name="colorChoices">
+        <item>Pastel</item>
+        <item>Purple</item>
+        <item>Yellow</item>
+        <item>Pink</item>
+        <item>Blue</item>
+        <item>Orange</item>
+    </string-array>
+</resources>
