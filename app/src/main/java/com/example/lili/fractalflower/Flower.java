@@ -21,33 +21,19 @@ public class Flower {
     private ArrayList<Ring> rings = new ArrayList<Ring>();
 
     //centered overlap in petals is default off
-    private static boolean centerPetals = false;
+    private boolean centerPetals = false;
 
     private Random rand = new Random();
 
     public Flower() {
+        /*
         Petal petal = new Petal(PetalShape.MEDIUM);
         petals.add(petal);
 
-        rings.add(new Ring(1, 5, 0, Color.BLUE));
+        rings.add(new Ring(1, 5, 0, Color.BLUE));*/
     }
 
     public Flower(int type) {
-        /*
-        //three rings of varying size 1, 2, 3
-        for (int i = 0; i<3; i++) {
-            //lavender shades for all of them
-            int color = Color.argb(255 - 50*i,200 - 25*i, 0, 200-25*i);
-            int scale = i+1;
-
-            //medium petal
-            Petal med = new Petal(PetalShape.WIDE);
-            petals.add(i, med);
-
-            Ring current = new Ring(scale, 5, 0, color);
-            rings.add(i, current);
-        }
-        */
         //lavender shades for all of them
         int color = Color.argb(255,200, 0, 200);
         int scale = 3;
@@ -58,11 +44,6 @@ public class Flower {
 
         Ring current = new Ring(scale, 5, 0, color);
         rings.add(0, current);
-    }
-
-    public Flower(ArrayList<Ring> r, ArrayList<Petal> p) {
-        rings = r;
-        petals = p;
     }
 
     public Flower(FlowerTypes type) {
@@ -93,12 +74,14 @@ public class Flower {
         }
     }
 
+    //adds a complete ring to the arraylists, including the petal information
     public void addRing(int size, int petalRangeStart, int petalRangeEnd, int offset, int color, PetalShape shape) {
         int numPetals = rand.nextInt(petalRangeEnd - petalRangeStart + 1) + petalRangeStart;
         Ring r = new Ring(size, numPetals, offset, color);
         rings.add(r);
 
         Petal p = new Petal(shape);
+        petals.add(p);
     }
 
     public static void drawFlower(Canvas canvas, Flower flower) {
@@ -106,7 +89,7 @@ public class Flower {
         for (int i=0; i<flower.getLevels(); i++) {
             //rotation of each individual petal
             int numPetal = flower.getNumPetals(i);
-            int angle = 360/numPetal;
+            double angle = 360.0/numPetal;
             int offset = flower.getOffset(i);
 
             //create petal shape from bounds (petal) and ring color
@@ -124,7 +107,7 @@ public class Flower {
                     float mult = (float) (flower.getOvalHeight(i)*2.0/flower.getOvalWidth(i));
                     canvas.translate((float) (flower.getOvalWidth(i)*mult)/numPetal, (float) (flower.getOvalWidth(i)*mult)/numPetal);
                 }
-                canvas.rotate(angle);
+                canvas.rotate((float) (angle));
 
                 oval.draw(canvas);
             }
@@ -132,8 +115,8 @@ public class Flower {
 
             //align center if center petals is on
             if (flower.centerPetals) {
-                canvas.translate(numPetal, 0);
-                canvas.translate(0, -(flower.getPetal(i).bottom-flower.getPetal(i).top)/2);
+                //canvas.translate(numPetal, 0);
+                //canvas.translate(0, -(flower.getPetal(i).bottom-flower.getPetal(i).top)/2);
             }
         }
         canvas.restore();
@@ -228,11 +211,11 @@ public class Flower {
         }
     } */
 
-    public static void setCenterPetals(boolean b) {
+    public void setCenterPetals(boolean b) {
         centerPetals = b;
     }
 
-    public static boolean getCenterPetals() {
+    public boolean getCenterPetals() {
         return centerPetals;
     }
 
@@ -277,12 +260,12 @@ public class Flower {
     }
 
     private int getOvalHeight(int i) {
-        int height = this.getBottom(i) - this.getTop(i);
+        int height = Math.abs(this.getBottom(i) - this.getTop(i));
         return height;
     }
 
     private int getOvalWidth(int i) {
-        int width = this.getRight(i) - this.getLeft(i);
+        int width = Math.abs(this.getRight(i) - this.getLeft(i));
         return width;
     }
 

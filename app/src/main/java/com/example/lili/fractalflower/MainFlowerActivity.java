@@ -35,6 +35,7 @@ public class MainFlowerActivity extends AppCompatActivity {
             }
         });
 
+        //get layout and add canvas to it
         LinearLayout layout = (LinearLayout) getLayout();
         drawCanvas(layout);
     }
@@ -61,6 +62,18 @@ public class MainFlowerActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
         //TODO add menu things
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        flowerView.saveBitmap();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        flowerView.restoreBitmap();
     }
 
     /**
@@ -92,9 +105,7 @@ public class MainFlowerActivity extends AppCompatActivity {
      * @param view
      */
     public void clearCanvas(View view) {
-        //don't save the current canvas and redraw
-        flowerView.setMakeNewCanvas(true);
-        flowerView.setAddFlower(false);
+        flowerView.resetBufferCanvas();
         flowerView.invalidate();
     }
 
@@ -103,17 +114,11 @@ public class MainFlowerActivity extends AppCompatActivity {
      * @param view
      */
     public void generateCanvas(View view) {
-        //save the current canvas and don't refresh
-        Bitmap bitmap = flowerView.getBitmap();
-        flowerView.setMakeNewCanvas(false);
-
-        //redraw onto saved canvas
-        flowerView.setBitmap(bitmap);
-        flowerView.setAddFlower(true);
+        flowerView.addFlower();
         flowerView.invalidate();
     }
 
-
+    //testing
     public void addCanvas(View view) {
         Toast t = Toast.makeText(this.getApplicationContext(), "this button doesn't do anything :(", Toast.LENGTH_SHORT);
         t.show();

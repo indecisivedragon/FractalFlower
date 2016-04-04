@@ -20,6 +20,8 @@ import android.widget.ToggleButton;
 
 public class DisplaySettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    private static Spinner spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,20 +55,20 @@ public class DisplaySettingsActivity extends AppCompatActivity implements Adapte
         //select center petals
         Switch mySwitch = (Switch) findViewById(R.id.centerPetalsSwitch);
         //set the switch to whatever center petals was
-        mySwitch.setChecked(Flower.getCenterPetals());
+        mySwitch.setChecked(FlowerFactory.getCenterPetals());
         //attach a listener to check for changes in state
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    Flower.setCenterPetals(true);
+                    FlowerFactory.setCenterPetals(true);
                 }else{
-                    Flower.setCenterPetals(false);
+                    FlowerFactory.setCenterPetals(false);
                 }
             }
         });
 
-        Spinner spinner = (Spinner) findViewById(R.id.colorSpinner);
+        spinner = (Spinner) findViewById(R.id.colorSpinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.colorChoices, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
@@ -89,7 +91,22 @@ public class DisplaySettingsActivity extends AppCompatActivity implements Adapte
 
         switch (item) {
             case "Pastel":
-                System.out.println("pastel thing?");
+                FlowerFactory.setColor(FlowerFactory.FlowerColor.PASTEL);
+                break;
+            case "Purple":
+                FlowerFactory.setColor(FlowerFactory.FlowerColor.PURPLE);
+                break;
+            case "Yellow":
+                FlowerFactory.setColor(FlowerFactory.FlowerColor.YELLOW);
+                break;
+            case "Pink":
+                FlowerFactory.setColor(FlowerFactory.FlowerColor.PINK);
+                break;
+            case "Blue":
+                FlowerFactory.setColor(FlowerFactory.FlowerColor.BLUE);
+                break;
+            case "Orange":
+                FlowerFactory.setColor(FlowerFactory.FlowerColor.ORANGE);
                 break;
             default:
                 break;
@@ -97,6 +114,8 @@ public class DisplaySettingsActivity extends AppCompatActivity implements Adapte
 
         // Showing selected spinner item
         Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+
+        spinner.setSelection(position);
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {
