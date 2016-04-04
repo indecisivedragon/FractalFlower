@@ -23,69 +23,38 @@ public class FlowerView extends SurfaceView {
 
     private Paint paint = new Paint();
     private Random rand = new Random();
+
     private Canvas bufferCanvas = null;
     private Bitmap bufferBitmap = null;
+
+    private static Bitmap savedBitmap = null;
 
     private int height = 200;
     private int width = 200;
     private int heightPadding = 0;
     private int widthPadding = 0;
 
-    /*
-    //make new canvas if true; reload from bitmap if false
-    private boolean makeNewCanvas = true;
-    //add a flower or not to whatever canvas we have
-    private boolean addFlower = false;
-    */
-
     private ArrayList<Flower> flowers = new ArrayList<Flower>();
-
-    private Bitmap bitmap;
 
     FlowerView(Context context) {
         super(context);
-        resetBufferCanvas();
     }
 
     @Override
     public void onDraw(Canvas c) {
         super.onDraw(c);
 
-        height = getHeight();
-        width = getWidth();
-
         //set bitmap and draw to canvas
-        //canvas = c;
-        //init(c);
+        initSizeParams(c);
 
+        //draw to canvas the current bitmap stored
         c.drawBitmap(bufferBitmap, 0, 0, paint);
-
-        /*
-        if (addFlower) {
-            flowers = new ArrayList<Flower>();
-            Flower flower = new Flower(Flower.FlowerTypes.THREE_LAYERED_RANDOM_PASTEL);
-            //Flower flower = new Flower(10);
-            flowers.add(flower);
-
-            //add flowers, if any
-            drawFlowers(c);
-            //Flower.drawTestFlower(canvas, flower);
-        }
-        */
-    }
-
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
-
-    public void setBitmap(Bitmap b) {
-        bitmap = b;
     }
 
     /**
-     * initializes the ovals
+     * sets width and height
      */
-    private void init(Canvas canvas) {
+    private void initSizeParams(Canvas canvas) {
         //sets height and width of the screen
         height = canvas.getHeight();
         width = canvas.getWidth();
@@ -94,51 +63,15 @@ public class FlowerView extends SurfaceView {
         heightPadding = height/5;
         widthPadding = width/5;
 
-        System.out.println("canvas height" + height);
-
-        /*
-        if (makeNewCanvas) {
-            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-            canvas = new Canvas(bitmap);
-            canvas.drawColor(Color.WHITE);
-        }
-        else {
-            canvas = new Canvas(bitmap);
-        }
-        */
-    }
-
-    private void drawFlowers(Canvas canvas) {
-        for (int i=0; i<flowers.size(); i++) {
-            int dx = widthPadding + rand.nextInt(width - 2*widthPadding);
-            int dy = heightPadding + rand.nextInt(height - 2*heightPadding);
-
-            canvas.save();
-            canvas.translate(300, 300);
-            //canvas.translate(dx, dy);
-            Flower.drawFlower(canvas, flowers.get(i));
-            canvas.restore();
+        if (bufferBitmap == null) {
+            resetBufferCanvas();
         }
     }
 
-    //testing oval
-    private void drawOval(Canvas canvas) {
-        paint.setColor(Color.argb(200, 100, 0, 100));
-        paint.setStrokeWidth(0);
-        canvas.drawOval(100, 100, 300, 200, paint);
-
-        paint.setColor(Color.argb(200, 150, 0, 150));
-        canvas.drawOval(175, 140, 300, 160, paint);
-    }
-
-    public void resetBufferCanvas() {new Canvas();
-        bufferBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-        bufferCanvas = new Canvas(bufferBitmap);
-        bufferCanvas.drawColor(Color.WHITE);
-    }
-
-    public void addFlower() {
-        flowers.add(new Flower(10));
+    /**
+     * draw every flower in the flower array
+     */
+    private void drawFlowers() {
         for (int i=0; i<flowers.size(); i++) {
             int dx = widthPadding + rand.nextInt(width - 2 * widthPadding);
             int dy = heightPadding + rand.nextInt(height - 2 * heightPadding);
@@ -152,13 +85,45 @@ public class FlowerView extends SurfaceView {
         }
     }
 
-    /*
-    public void setMakeNewCanvas(boolean b) {
-        makeNewCanvas = b;
+    //testing oval
+    private void drawOval() {
+        paint.setColor(Color.argb(200, 100, 0, 100));
+        paint.setStrokeWidth(0);
+        bufferCanvas.drawOval(100, 100, 300, 200, paint);
+
+        paint.setColor(Color.argb(200, 150, 0, 150));
+        bufferCanvas.drawOval(175, 140, 300, 160, paint);
     }
 
-    public void setAddFlower(boolean b) {
-        addFlower = b;
+    public void resetBufferCanvas() {
+        bufferBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        bufferCanvas = new Canvas(bufferBitmap);
+        bufferCanvas.drawColor(Color.WHITE);
     }
-    */
+
+    public void addFlower() {
+        //flowers.add(new Flower(Flower.FlowerTypes.THREE_LAYERED_RANDOM_PASTEL));
+        FlowerFactory factory = new FlowerFactory();
+        Flower flower = FlowerFactory.createFlower(3, FlowerFactory.getCenterPetals(), FlowerFactory.getColor());
+        flowers.add(flower);
+
+        //System.out.println("added flowers, now drawing");
+        drawFlowers();
+
+        //System.out.println("finished drawing flowers");
+        flowers.clear();
+    }
+
+    //saves current bitmap for activity resume
+    public void saveBitmap() {
+        savedBitmap = bufferBitmap.copy(bufferBitmap.getConfig(), true);
+    }
+
+    //restores previous bitmap on activity resume
+    public void restoreBitmap() {
+        if (savedBitmap != null) {
+            bufferBitmap = savedBitmap.copy(savedBitmap.getConfig(), true);
+            bufferCanvas = new Canvas(bufferBitmap);
+        }
+    }
 }
