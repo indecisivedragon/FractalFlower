@@ -2,7 +2,7 @@
     <string name="app_name">Fractal Flower</string>
     <string name="clearCanvasButtonText">Clear</string>
     <string name="generateCanvasButtonText">Generate</string>
-    <string name="addCanvasButtonText">Add</string>
+    <string name="addCanvasButtonText">Text</string>
 
 
     <string name="action_settings">Settings</string>

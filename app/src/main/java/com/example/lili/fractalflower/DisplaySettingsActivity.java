@@ -76,14 +76,11 @@ public class DisplaySettingsActivity extends AppCompatActivity implements Adapte
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
+        spinner.setSelection(FlowerFactory.getSpinnerPosition());
+
         spinner.setOnItemSelectedListener(this);
     }
 
-    /*
-    public void setCenterPetals(View view) {
-        Toast t = Toast.makeText(this.getApplicationContext(), "switch is touched", Toast.LENGTH_SHORT);
-        t.show();
-    } */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // On selecting a spinner item
@@ -92,23 +89,30 @@ public class DisplaySettingsActivity extends AppCompatActivity implements Adapte
         switch (item) {
             case "Pastel":
                 FlowerFactory.setColor(FlowerFactory.FlowerColor.PASTEL);
+                FlowerFactory.setSpinnerPosition(0);
                 break;
             case "Purple":
                 FlowerFactory.setColor(FlowerFactory.FlowerColor.PURPLE);
+                FlowerFactory.setSpinnerPosition(1);
                 break;
             case "Yellow":
                 FlowerFactory.setColor(FlowerFactory.FlowerColor.YELLOW);
+                FlowerFactory.setSpinnerPosition(2);
                 break;
             case "Pink":
                 FlowerFactory.setColor(FlowerFactory.FlowerColor.PINK);
+                FlowerFactory.setSpinnerPosition(3);
                 break;
             case "Blue":
                 FlowerFactory.setColor(FlowerFactory.FlowerColor.BLUE);
+                FlowerFactory.setSpinnerPosition(4);
                 break;
             case "Orange":
                 FlowerFactory.setColor(FlowerFactory.FlowerColor.ORANGE);
+                FlowerFactory.setSpinnerPosition(5);
                 break;
             default:
+                FlowerFactory.setSpinnerPosition(0);
                 break;
         }
 
