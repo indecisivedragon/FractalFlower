@@ -16,18 +16,8 @@ public class FlowerFactory {
     private static int rings = 1;
     private static boolean centerPetals = false;
     private static FlowerColor color = FlowerColor.PASTEL;
-
-    public static int getSpinnerPosition() {
-        return spinnerPosition;
-    }
-
-    public static void setSpinnerPosition(int spinnerPosition) {
-        FlowerFactory.spinnerPosition = spinnerPosition;
-    }
-
     private static int spinnerPosition = 0;
-    //alpha, r, g, b
-    //private static int[] color = {100, 100, 100, 100};
+
     private static double gradient = 50;
 
     //each ring
@@ -67,7 +57,7 @@ public class FlowerFactory {
 
         for (int i=rings; i>0; i--) {
             int ringColor = Color.argb((int) (rgbArray[0]+increase *i), (int) (rgbArray[1]+increase*i), (int) (rgbArray[2]+increase*i), (int) (rgbArray[3]+increase*i));
-            f.addRing(i, numPetals, 0, ringColor, Flower.PetalShape.WIDE);
+            f.addRing(i, numPetals, 0, ringColor, shape);
         }
         return f;
     }
@@ -189,6 +179,23 @@ public class FlowerFactory {
     public static FlowerColor getColor() {
         return FlowerFactory.color;
     }
+
+    public static int getSpinnerPosition() {
+        return spinnerPosition;
+    }
+
+    public static void setSpinnerPosition(int spinnerPosition) {
+        FlowerFactory.spinnerPosition = spinnerPosition;
+    }
+
+    public static double getGradient() {
+        return gradient;
+    }
+
+    public static void setGradient(int gradient) {
+        FlowerFactory.gradient = gradient;
+    }
+
 
     public enum FlowerColor {
         PASTEL, PURPLE, YELLOW, PINK, BLUE, ORANGE;

@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -117,12 +118,38 @@ public class DisplaySettingsActivity extends AppCompatActivity implements Adapte
         }
 
         // Showing selected spinner item
-        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+        //Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
 
         spinner.setSelection(position);
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {
         Toast.makeText(this.getApplicationContext(), "help!!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onRadioButtonClicked(View view) {
+        //Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case (R.id.setNarrowPetalButton):
+                if (checked) {
+                    FlowerFactory.setShape(Flower.PetalShape.NARROW);
+                }
+                break;
+            case (R.id.setMediumPetalButton):
+                if (checked) {
+                    FlowerFactory.setShape(Flower.PetalShape.MEDIUM);
+                }
+                break;
+            case (R.id.setWidePetalButton):
+                if (checked) {
+                    FlowerFactory.setShape(Flower.PetalShape.WIDE);
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

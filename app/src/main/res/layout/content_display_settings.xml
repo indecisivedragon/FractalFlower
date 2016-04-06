@@ -32,4 +32,31 @@
         android:id="@+id/colorSpinner"
         />
 
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/setNarrowPetalButton"
+            android:text="@string/setNarrowPetalText"
+            android:onClick="onRadioButtonClicked"
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/setMediumPetalButton"
+            android:text="@string/setMediumPetalText"
+            android:onClick="onRadioButtonClicked"
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/setWidePetalButton"
+            android:text="@string/setWidePetalText"
+            android:onClick="onRadioButtonClicked"
+        />
+    </RadioGroup>
+
 </LinearLayout>

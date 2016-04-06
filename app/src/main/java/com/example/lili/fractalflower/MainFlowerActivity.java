@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
@@ -86,7 +87,6 @@ public class MainFlowerActivity extends AppCompatActivity {
     private void showSettingsPage() {
         Intent intent = new Intent(this, DisplaySettingsActivity.class);
         startActivity(intent);
-        //TODO actually add settings
     }
 
     public View getLayout() {
@@ -142,9 +142,10 @@ public class MainFlowerActivity extends AppCompatActivity {
         }
 
         catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "SMS faild, please try again.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "SMS failed, please try again.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
         */
+
     }
 }
