@@ -2,6 +2,7 @@ package com.example.lili.fractalflower;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -76,10 +77,21 @@ public class DisplaySettingsActivity extends AppCompatActivity implements Adapte
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-
         spinner.setSelection(FlowerFactory.getSpinnerPosition());
-
         spinner.setOnItemSelectedListener(this);
+
+        RadioButton narrow = (RadioButton)findViewById(R.id.setNarrowPetalButton);
+        if (FlowerFactory.getShape() == Flower.PetalShape.NARROW) {
+            narrow.setChecked(true);
+        }
+        RadioButton medium = (RadioButton)findViewById(R.id.setMediumPetalButton);
+        if (FlowerFactory.getShape() == Flower.PetalShape.MEDIUM) {
+            medium.setChecked(true);
+        }
+        RadioButton wide = (RadioButton)findViewById(R.id.setWidePetalButton);
+        if (FlowerFactory.getShape() == Flower.PetalShape.WIDE) {
+            wide.setChecked(true);
+        }
     }
 
     @Override
