@@ -2,11 +2,9 @@
     <string name="app_name">Fractal Flower</string>
     <string name="clearCanvasButtonText">Clear</string>
     <string name="generateCanvasButtonText">Generate</string>
-    <string name="addCanvasButtonText">Add</string>
-
+    <string name="addCanvasButtonText">Vibrate</string>
 
     <string name="action_settings">Settings</string>
-
 
     <string name="title_activity_display_settings">DisplaySettingsActivity</string>
     <string name="setCenterPetalsText">Center</string>
@@ -19,4 +17,7 @@
         <item>Blue</item>
         <item>Orange</item>
     </string-array>
+    <string name="setNarrowPetalText">Narrow</string>
+    <string name="setMediumPetalText">Medium</string>
+    <string name="setWidePetalText">Wide</string>
 </resources>

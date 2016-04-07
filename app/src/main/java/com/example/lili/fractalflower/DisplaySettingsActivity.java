@@ -2,6 +2,7 @@ package com.example.lili.fractalflower;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -75,15 +77,23 @@ public class DisplaySettingsActivity extends AppCompatActivity implements Adapte
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-
+        spinner.setSelection(FlowerFactory.getSpinnerPosition());
         spinner.setOnItemSelectedListener(this);
+
+        RadioButton narrow = (RadioButton)findViewById(R.id.setNarrowPetalButton);
+        if (FlowerFactory.getShape() == Flower.PetalShape.NARROW) {
+            narrow.setChecked(true);
+        }
+        RadioButton medium = (RadioButton)findViewById(R.id.setMediumPetalButton);
+        if (FlowerFactory.getShape() == Flower.PetalShape.MEDIUM) {
+            medium.setChecked(true);
+        }
+        RadioButton wide = (RadioButton)findViewById(R.id.setWidePetalButton);
+        if (FlowerFactory.getShape() == Flower.PetalShape.WIDE) {
+            wide.setChecked(true);
+        }
     }
 
-    /*
-    public void setCenterPetals(View view) {
-        Toast t = Toast.makeText(this.getApplicationContext(), "switch is touched", Toast.LENGTH_SHORT);
-        t.show();
-    } */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // On selecting a spinner item
@@ -92,33 +102,66 @@ public class DisplaySettingsActivity extends AppCompatActivity implements Adapte
         switch (item) {
             case "Pastel":
                 FlowerFactory.setColor(FlowerFactory.FlowerColor.PASTEL);
+                FlowerFactory.setSpinnerPosition(0);
                 break;
             case "Purple":
                 FlowerFactory.setColor(FlowerFactory.FlowerColor.PURPLE);
+                FlowerFactory.setSpinnerPosition(1);
                 break;
             case "Yellow":
                 FlowerFactory.setColor(FlowerFactory.FlowerColor.YELLOW);
+                FlowerFactory.setSpinnerPosition(2);
                 break;
             case "Pink":
                 FlowerFactory.setColor(FlowerFactory.FlowerColor.PINK);
+                FlowerFactory.setSpinnerPosition(3);
                 break;
             case "Blue":
                 FlowerFactory.setColor(FlowerFactory.FlowerColor.BLUE);
+                FlowerFactory.setSpinnerPosition(4);
                 break;
             case "Orange":
                 FlowerFactory.setColor(FlowerFactory.FlowerColor.ORANGE);
+                FlowerFactory.setSpinnerPosition(5);
                 break;
             default:
+                FlowerFactory.setSpinnerPosition(0);
                 break;
         }
 
         // Showing selected spinner item
-        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+        //Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
 
         spinner.setSelection(position);
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {
         Toast.makeText(this.getApplicationContext(), "help!!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onRadioButtonClicked(View view) {
+        //Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case (R.id.setNarrowPetalButton):
+                if (checked) {
+                    FlowerFactory.setShape(Flower.PetalShape.NARROW);
+                }
+                break;
+            case (R.id.setMediumPetalButton):
+                if (checked) {
+                    FlowerFactory.setShape(Flower.PetalShape.MEDIUM);
+                }
+                break;
+            case (R.id.setWidePetalButton):
+                if (checked) {
+                    FlowerFactory.setShape(Flower.PetalShape.WIDE);
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

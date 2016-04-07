@@ -75,8 +75,8 @@ public class Flower {
     }
 
     //adds a complete ring to the arraylists, including the petal information
-    public void addRing(int size, int petalRangeStart, int petalRangeEnd, int offset, int color, PetalShape shape) {
-        int numPetals = rand.nextInt(petalRangeEnd - petalRangeStart + 1) + petalRangeStart;
+    public void addRing(int size, int numPetals, int offset, int color, PetalShape shape) {
+        //int numPetals = rand.nextInt(petalRangeEnd - petalRangeStart + 1) + petalRangeStart;
         Ring r = new Ring(size, numPetals, offset, color);
         rings.add(r);
 
@@ -115,8 +115,8 @@ public class Flower {
 
             //align center if center petals is on
             if (flower.centerPetals) {
-                //canvas.translate(numPetal, 0);
-                //canvas.translate(0, -(flower.getPetal(i).bottom-flower.getPetal(i).top)/2);
+                canvas.translate(numPetal, 0);
+                canvas.translate(0, (flower.getPetal(i).bottom-flower.getPetal(i).top)/2);
             }
         }
         canvas.restore();
