@@ -33,6 +33,7 @@
         />
 
     <RadioGroup
+        android:id="@+id/petalWidthRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -41,22 +42,49 @@
             android:layout_height="wrap_content"
             android:id="@+id/setNarrowPetalButton"
             android:text="@string/setNarrowPetalText"
-            android:onClick="onRadioButtonClicked"
+            android:onClick="onPetalRadioButtonClicked"
             />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/setMediumPetalButton"
             android:text="@string/setMediumPetalText"
-            android:onClick="onRadioButtonClicked"
+            android:onClick="onPetalRadioButtonClicked"
             />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/setWidePetalButton"
             android:text="@string/setWidePetalText"
-            android:onClick="onRadioButtonClicked"
+            android:onClick="onPetalRadioButtonClicked"
         />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/flowerSizeRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/setSmallFlowerButton"
+            android:text="@string/setSmallFlowerText"
+            android:onClick="onSizeRadioButtonClicked"
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/setMediumFlowerButton"
+            android:text="@string/setMediumFlowerText"
+            android:onClick="onSizeRadioButtonClicked"
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/setLargeFlowerButton"
+            android:text="@string/setLargeFlowerText"
+            android:onClick="onSizeRadioButtonClicked"
+            />
     </RadioGroup>
 
 </LinearLayout>

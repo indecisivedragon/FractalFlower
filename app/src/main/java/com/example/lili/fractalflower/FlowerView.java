@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.support.v4.view.MotionEventCompat;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ public class FlowerView extends SurfaceView {
     private int widthPadding = 0;
 
     private ArrayList<Flower> flowers = new ArrayList<Flower>();
+
 
     FlowerView(Context context) {
         super(context);
@@ -73,15 +76,7 @@ public class FlowerView extends SurfaceView {
      */
     private void drawFlowers() {
         for (int i=0; i<flowers.size(); i++) {
-            int dx = widthPadding + rand.nextInt(width - 2 * widthPadding);
-            int dy = heightPadding + rand.nextInt(height - 2 * heightPadding);
-
-            bufferCanvas.save();
-            bufferCanvas.translate(dx, dy);
-
             Flower.drawFlower(bufferCanvas, flowers.get(i));
-
-            bufferCanvas.restore();
         }
     }
 
@@ -101,10 +96,21 @@ public class FlowerView extends SurfaceView {
         bufferCanvas.drawColor(Color.WHITE);
     }
 
+    //draw a flower at a random location
     public void addFlower() {
+        int dx = widthPadding + rand.nextInt(width - 2 * widthPadding);
+        int dy = heightPadding + rand.nextInt(height - 2 * heightPadding);
+        addFlower(dx, dy);
+    }
+
+    //draw a flower at location dx, dy
+    public void addFlower(float dx, float dy) {
         //flowers.add(new Flower(Flower.FlowerTypes.THREE_LAYERED_RANDOM_PASTEL));
-        FlowerFactory factory = new FlowerFactory();
+        //FlowerFactory factory = new FlowerFactory();
         Flower flower = FlowerFactory.createFlower(3, FlowerFactory.getCenterPetals(), FlowerFactory.getColor());
+        flower.setLocationX(dx);
+        flower.setLocationY(dy);
+
         flowers.add(flower);
 
         //System.out.println("added flowers, now drawing");
@@ -125,5 +131,27 @@ public class FlowerView extends SurfaceView {
             bufferBitmap = savedBitmap.copy(savedBitmap.getConfig(), true);
             bufferCanvas = new Canvas(bufferBitmap);
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int action = MotionEventCompat.getActionMasked(event);
+
+        float x, y;
+
+        switch (action) {
+            default:
+                x = event.getX();
+                y = event.getY();
+
+                //Toast t = Toast.makeText(this.getContext(), x + " " + y, Toast.LENGTH_SHORT);
+                //t.show();
+
+                addFlower(x, y);
+
+                break;
+        }
+        this.postInvalidate();
+        return super.onTouchEvent(event);
     }
 }

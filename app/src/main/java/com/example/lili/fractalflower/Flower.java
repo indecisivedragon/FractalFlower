@@ -20,6 +20,8 @@ public class Flower {
     private ArrayList<Petal> petals = new ArrayList<Petal>();
     private ArrayList<Ring> rings = new ArrayList<Ring>();
 
+    private float locationX = 0, locationY = 0;
+
     //centered overlap in petals is default off
     private boolean centerPetals = false;
 
@@ -75,7 +77,7 @@ public class Flower {
     }
 
     //adds a complete ring to the arraylists, including the petal information
-    public void addRing(int size, int numPetals, int offset, int color, PetalShape shape) {
+    public void addRing(double size, int numPetals, int offset, int color, PetalShape shape) {
         //int numPetals = rand.nextInt(petalRangeEnd - petalRangeStart + 1) + petalRangeStart;
         Ring r = new Ring(size, numPetals, offset, color);
         rings.add(r);
@@ -86,6 +88,7 @@ public class Flower {
 
     public static void drawFlower(Canvas canvas, Flower flower) {
         canvas.save();
+        canvas.translate(flower.getLocationX(), flower.getLocationY());
         for (int i=0; i<flower.getLevels(); i++) {
             //rotation of each individual petal
             int numPetal = flower.getNumPetals(i);
@@ -240,23 +243,23 @@ public class Flower {
     }
 
     private int getLeft(int level) {
-        int scale = rings.get(level).scale;
-        return (petals.get(level).left)*scale;
+        return ((int) ((petals.get(level).left)*getScaled(level)));
     }
 
     private int getTop(int level) {
-        int scale = rings.get(level).scale;
-        return (petals.get(level).top)*scale;
+        return ((int) ((petals.get(level).top)*getScaled(level)));
     }
 
     private int getRight(int level) {
-        int scale = rings.get(level).scale;
-        return (petals.get(level).right)*scale;
+        return ((int) ((petals.get(level).right)*getScaled(level)));
     }
 
     private int getBottom(int level) {
-        int scale = rings.get(level).scale;
-        return (petals.get(level).bottom)*scale;
+        return ((int) ((petals.get(level).bottom)*getScaled(level)));
+    }
+
+    private double getScaled(int level) {
+        return rings.get(level).scale;
     }
 
     private int getOvalHeight(int i) {
@@ -269,13 +272,33 @@ public class Flower {
         return width;
     }
 
+    public float getLocationX() {
+        return locationX;
+    }
+
+    public void setLocationX(float x) {
+        locationX = x;
+    }
+
+    public float getLocationY() {
+        return locationY;
+    }
+
+    public void setLocationY(float y) {
+        locationY = y;
+    }
+
+    //sizes
+    //i, 2, 3
+    //0.75, 1.5, 2.25
+    //0.5, 1, 1.5
     private class Ring{
-        protected int scale = 0;
+        protected double scale = 0;
         protected int numPetal = 0;
         protected int offset = 0;
         protected int color = Color.argb(100, 100, 0, 100);
 
-        Ring(int scale, int numPetal, int offset, int color) {
+        Ring(double scale, int numPetal, int offset, int color) {
             this.scale = scale;
             this.numPetal = numPetal;
             this.offset = offset;

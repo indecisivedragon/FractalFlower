@@ -20,4 +20,7 @@
     <string name="setNarrowPetalText">Narrow</string>
     <string name="setMediumPetalText">Medium</string>
     <string name="setWidePetalText">Wide</string>
+    <string name="setSmallFlowerText">Small</string>
+    <string name="setMediumFlowerText">Medium</string>
+    <string name="setLargeFlowerText">Large</string>
 </resources>

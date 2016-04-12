@@ -13,6 +13,7 @@ public class FlowerFactory {
     private static Random rand = new Random();
 
     //overall + defaults
+    //these are the settings modes that should be preserved after action end
     private static int rings = 1;
     private static boolean centerPetals = false;
     private static FlowerColor color = FlowerColor.PASTEL;
@@ -21,7 +22,7 @@ public class FlowerFactory {
     private static double gradient = 50;
 
     //each ring
-    private static int size;
+    private static int size = 2;
     private static int petalRangeStart;
     private static int petalRangeEnd;
     private static int offset;
@@ -57,7 +58,7 @@ public class FlowerFactory {
 
         for (int i=rings; i>0; i--) {
             int ringColor = Color.argb((int) (rgbArray[0]+increase *i), (int) (rgbArray[1]+increase*i), (int) (rgbArray[2]+increase*i), (int) (rgbArray[3]+increase*i));
-            f.addRing(i, numPetals, 0, ringColor, shape);
+            f.addRing(i*(0.5+0.25*(size-1)), numPetals, 0, ringColor, shape);
         }
         return f;
     }
@@ -65,46 +66,68 @@ public class FlowerFactory {
     //from palest shade
     private static int[] getColorFromEnum(FlowerColor color) {
         int[] tempColor = new int[4];
-        tempColor[0] = 100;
 
         switch (color) {
             case PASTEL:
-                tempColor[1] = rand.nextInt(100) + 100;
-                tempColor[2] = rand.nextInt(100) + 1;
-                tempColor[3] = rand.nextInt(100) + 100;
+                tempColor = setRandomColorArray(100, 100, 100, 0, 100);
                 break;
             case PURPLE:
-                tempColor[1] = 200;
-                tempColor[2] = 0;
-                tempColor[3] = 200;
+                tempColor = setRandomColorArray(30, 100, 180, 0, 180);
                 break;
             case YELLOW:
-                tempColor[1] = 200;
-                tempColor[2] = 200;
-                tempColor[3] = 20;
+                tempColor = setRandomColorArray(30, 100, 180, 180, 10);
                 break;
             case PINK:
-                tempColor[1] = 200;
-                tempColor[2] = 100;
-                tempColor[3] = 150;
+                tempColor = setRandomColorArray(30, 100, 180, 90, 140);
                 break;
             case BLUE:
-                tempColor[1] = 0;
-                tempColor[2] = 0;
-                tempColor[3] = 200;
+                tempColor = setRandomColorArray(30, 100, 0, 0, 180);
                 break;
             case ORANGE:
-                tempColor[1] = 200;
-                tempColor[2] = 125;
-                tempColor[3] = 0;
+                tempColor = setRandomColorArray(30, 100, 180, 115, 0);
                 break;
             default:
-                tempColor[1] = 0;
-                tempColor[2] = 0;
-                tempColor[3] = 0;
+                tempColor = setRandomColorArray(30, 100, 0, 0, 0);
                 break;
         }
         return tempColor;
+    }
+
+    /**
+     * sets random shades of a color
+     * @param range change in shades
+     * @param a alpha base which is not randomized
+     * @param r r base
+     * @param g g base
+     * @param b b base
+     * @return
+     */
+    private static int[] setRandomColorArray(int range, int a, int r, int g, int b) {
+        int[] colorShades = new int[4];
+        colorShades[0] = a;
+        colorShades[1] = setRandomColor(range, r);
+        colorShades[2] = setRandomColor(range, g);
+        colorShades[3] = setRandomColor(range, b);
+        return colorShades;
+    }
+
+    /**
+     * returns random within range with base, bounds checking for color values 0 - 255
+     * @param range range of shade
+     * @param base a, r, g, b value to be passed in
+     * @return
+     */
+    private static int setRandomColor(int range, int base) {
+        int color = range/2 - rand.nextInt(range) + base;
+        if (color < 0) {
+            return 0;
+        }
+        else if (color > 255) {
+            return 255;
+        }
+        else {
+            return color;
+        }
     }
 
     private static int getColorFromArray(int[] color, int level) {

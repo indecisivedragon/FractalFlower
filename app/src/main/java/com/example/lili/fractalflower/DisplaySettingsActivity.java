@@ -80,17 +80,30 @@ public class DisplaySettingsActivity extends AppCompatActivity implements Adapte
         spinner.setSelection(FlowerFactory.getSpinnerPosition());
         spinner.setOnItemSelectedListener(this);
 
-        RadioButton narrow = (RadioButton)findViewById(R.id.setNarrowPetalButton);
+        RadioButton narrowPetal = (RadioButton)findViewById(R.id.setNarrowPetalButton);
         if (FlowerFactory.getShape() == Flower.PetalShape.NARROW) {
-            narrow.setChecked(true);
+            narrowPetal.setChecked(true);
         }
-        RadioButton medium = (RadioButton)findViewById(R.id.setMediumPetalButton);
+        RadioButton mediumPetal = (RadioButton)findViewById(R.id.setMediumPetalButton);
         if (FlowerFactory.getShape() == Flower.PetalShape.MEDIUM) {
-            medium.setChecked(true);
+            mediumPetal.setChecked(true);
         }
-        RadioButton wide = (RadioButton)findViewById(R.id.setWidePetalButton);
+        RadioButton widePetal = (RadioButton)findViewById(R.id.setWidePetalButton);
         if (FlowerFactory.getShape() == Flower.PetalShape.WIDE) {
-            wide.setChecked(true);
+            widePetal.setChecked(true);
+        }
+
+        RadioButton smallFlower = (RadioButton) findViewById(R.id.setSmallFlowerButton);
+        if (FlowerFactory.getSize() == 1) {
+            smallFlower.setChecked(true);
+        }
+        RadioButton mediumFlower = (RadioButton)findViewById(R.id.setMediumFlowerButton);
+        if (FlowerFactory.getSize() == 2) {
+            mediumFlower.setChecked(true);
+        }
+        RadioButton largeFlower = (RadioButton)findViewById(R.id.setLargeFlowerButton);
+        if (FlowerFactory.getSize() == 3) {
+            largeFlower.setChecked(true);
         }
     }
 
@@ -139,7 +152,7 @@ public class DisplaySettingsActivity extends AppCompatActivity implements Adapte
         Toast.makeText(this.getApplicationContext(), "help!!", Toast.LENGTH_SHORT).show();
     }
 
-    public void onRadioButtonClicked(View view) {
+    public void onPetalRadioButtonClicked(View view) {
         //Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
 
@@ -158,6 +171,30 @@ public class DisplaySettingsActivity extends AppCompatActivity implements Adapte
             case (R.id.setWidePetalButton):
                 if (checked) {
                     FlowerFactory.setShape(Flower.PetalShape.WIDE);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void onSizeRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+
+        switch (view.getId()) {
+            case (R.id.setSmallFlowerButton):
+                if (checked) {
+                    FlowerFactory.setSize(1);
+                }
+                break;
+            case (R.id.setMediumFlowerButton):
+                if (checked) {
+                    FlowerFactory.setSize(2);
+                }
+                break;
+            case(R.id.setLargeFlowerButton):
+                if (checked) {
+                    FlowerFactory.setSize(3);
                 }
                 break;
             default:
