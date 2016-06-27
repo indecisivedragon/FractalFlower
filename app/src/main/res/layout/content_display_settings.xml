@@ -12,7 +12,7 @@
 
     android:orientation="vertical"
 
-    tools:context="com.example.lili.fractalflower.DisplaySettingsActivity"
+    tools:context="com.project.lili.fractalflower.DisplaySettingsActivity"
     tools:showIn="@layout/activity_display_settings"
 
     android:id="@+id/display_settings"

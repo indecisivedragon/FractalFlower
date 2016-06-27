@@ -1,31 +1,28 @@
-package com.example.lili.fractalflower;
+package com.project.lili.fractalflower;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
-import android.graphics.drawable.shapes.Shape;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 /**
  * Created by Lili on 3/26/2016.
+ * this class describes a flower
  */
 public class Flower {
 
-    private ArrayList<Petal> petals = new ArrayList<Petal>();
-    private ArrayList<Ring> rings = new ArrayList<Ring>();
+    private ArrayList<Petal> petals = new ArrayList<>();
+    private ArrayList<Ring> rings = new ArrayList<>();
 
     private float locationX = 0, locationY = 0;
 
     //centered overlap in petals is default off
     private boolean centerPetals = false;
 
-    private Random rand = new Random();
+    private static int width = 100;
 
     public Flower() {
         /*
@@ -49,6 +46,9 @@ public class Flower {
     }
 
     public Flower(FlowerTypes type) {
+
+        Random rand = new Random();
+
         switch (type) {
             case THREE_LAYERED_RANDOM_PASTEL:
                 //random number of petals
@@ -86,6 +86,8 @@ public class Flower {
         petals.add(p);
     }
 
+    //draws the flower on the canvas
+    //meant to be called from view thread
     public static void drawFlower(Canvas canvas, Flower flower) {
         canvas.save();
         canvas.translate(flower.getLocationX(), flower.getLocationY());
@@ -100,26 +102,33 @@ public class Flower {
             oval.setBounds(flower.getLeft(i), flower.getTop(i), flower.getRight(i), flower.getBottom(i));
             oval.getPaint().setColor(flower.getColor(i));
 
+            //difference between center of flower and center of where oval will be drawn
+            float yShift = flower.getOvalHeight(i)/2;
+
             canvas.save();
             canvas.rotate(offset);
             //draw the ring
             for (int j=0; j<numPetal; j++) {
-                //check centering and align petals if needed
-                if (flower.centerPetals) {
-                    //TODO make this less redundant
-                    float mult = (float) (flower.getOvalHeight(i)*2.0/flower.getOvalWidth(i));
-                    canvas.translate((float) (flower.getOvalWidth(i)*mult)/numPetal, (float) (flower.getOvalWidth(i)*mult)/numPetal);
-                }
-                canvas.rotate((float) (angle));
-
                 oval.draw(canvas);
+                //check centering and align petals if needed
+                //move oval up to center
+                if (flower.centerPetals) {
+                    canvas.translate(0, yShift);
+                }
+                //turn around center
+                canvas.rotate((float) (angle));
+                //move oval back down for next petal
+                if (flower.centerPetals) {
+                    canvas.translate(0, -yShift);
+                }
             }
             canvas.restore();
 
-            //align center if center petals is on
-            if (flower.centerPetals) {
-                canvas.translate(numPetal, 0);
-                canvas.translate(0, (flower.getPetal(i).bottom-flower.getPetal(i).top)/2);
+            //center ring centers if centerpetals is on
+            //shift up so that next yShift will be correct (but don't do this for last level
+            if (flower.centerPetals && i<flower.getLevels()-1) {
+                float diff = yShift - flower.getOvalHeight(i+1)/2;
+                canvas.translate(0, diff);
             }
         }
         canvas.restore();
@@ -162,57 +171,6 @@ public class Flower {
 
         canvas.restore();
     }
-
-    /*
-    //translate by x, y amount to move all petals in the ring to a common center
-    public static void translateToCenter(Canvas canvas, Flower flower, int level, int angle) {
-        //hypotenuse distance between old ycenter and rotated ycenter
-        double ovalHeight = flower.getYCenter(level);
-        double alpha = (180.0 - angle)/2;
-        double hypotenuse = 2*ovalHeight*Math.cos(alpha);
-
-        //translate left x amount to get to rotated x coordinate
-        float dx = (float) (Math.cos(90-alpha)*hypotenuse);
-
-        //translate up y amount to get to rotated y coordinate
-        float dy = (float) (Math.sin(90-alpha)*hypotenuse);
-
-        canvas.translate(dx, dy);
-    } */
-
-    /*
-    //TODO finish this method
-    public static void drawRing(Canvas canvas, Flower flower, int level) {
-        //rotation of each individual petal
-        int numPetal = flower.getNumPetals(level);
-        int angle = 360/numPetal;
-        int offset = flower.getOffset(level);
-
-        //create petal shape from bounds (petal) and ring color
-        ShapeDrawable oval = new ShapeDrawable(new OvalShape());
-        oval.setBounds(flower.getLeft(level), flower.getTop(level), flower.getRight(level), flower.getBottom(level));
-        oval.getPaint().setColor(flower.getColor(level));
-
-        //check centering
-        int xTranslate = 0;
-        int yTranslate = 0;
-        if (flower.centerPetals) {
-            xTranslate = flower.getXCenter(level);
-            yTranslate = flower.getYCenter(level);
-        }
-
-        //draw the ring
-        for (int j=0; j<numPetal; j++) {
-            //start canvas transform
-            canvas.save();
-            canvas.rotate(angle * j + offset);
-
-            oval.draw(canvas);
-
-            //end canvas transform
-            canvas.restore();
-        }
-    } */
 
     public void setCenterPetals(boolean b) {
         centerPetals = b;
@@ -263,13 +221,11 @@ public class Flower {
     }
 
     private int getOvalHeight(int i) {
-        int height = Math.abs(this.getBottom(i) - this.getTop(i));
-        return height;
+        return Math.abs(this.getBottom(i) - this.getTop(i));
     }
 
     private int getOvalWidth(int i) {
-        int width = Math.abs(this.getRight(i) - this.getLeft(i));
-        return width;
+        return Math.abs(this.getRight(i) - this.getLeft(i));
     }
 
     public float getLocationX() {
@@ -334,25 +290,19 @@ public class Flower {
         //changing shape requires recalculating bounds
         protected void setDimensions(PetalShape p) {
             shape = p;
+            left = 0;
+            top = 0;
+            right = width;
 
             switch (p) {
                 case NARROW:
-                    left = 0;
-                    top = 0;
-                    right = 100;
-                    bottom = 30;
+                    bottom = width/3;
                     break;
                 case MEDIUM:
-                    left = 0;
-                    top = 0;
-                    right = 100;
-                    bottom = 40;
+                    bottom = (int) (width/2.5);
                     break;
                 case WIDE:
-                    left = 0;
-                    top = 0;
-                    right = 100;
-                    bottom = 50;
+                    bottom = width/2;
                     break;
                 case CUSTOM:
                     //this should be handled elsewhere
@@ -364,10 +314,10 @@ public class Flower {
     }
 
     public enum PetalShape {
-        NARROW, MEDIUM, WIDE, CUSTOM;
+        NARROW, MEDIUM, WIDE, CUSTOM
     }
 
     public enum FlowerTypes {
-        THREE_LAYERED_RANDOM_PASTEL, TEST;
+        THREE_LAYERED_RANDOM_PASTEL, TEST
     }
 }

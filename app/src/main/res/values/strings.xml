@@ -5,6 +5,8 @@
     <string name="addCanvasButtonText">Vibrate</string>
 
     <string name="action_settings">Settings</string>
+    <string name="action_test_anim">Test Animation</string>
+    <string name="replay_animation">Replay</string>
 
     <string name="title_activity_display_settings">DisplaySettingsActivity</string>
     <string name="setCenterPetalsText">Center</string>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.lili.fractalflower">
+    package="com.project.lili.fractalflower">
 
     <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainFlowerActivity"
+            android:name="com.project.lili.fractalflower.MainFlowerActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -22,14 +22,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.lili.fractalflower.DisplaySettingsActivity"
+            android:name="com.project.lili.fractalflower.DisplaySettingsActivity"
             android:label="@string/title_activity_display_settings"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName="com.example.lili.fractalflower.MainFlowerActivity" >
+            android:parentActivityName="com.project.lili.fractalflower.MainFlowerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.lili.fractalflower.MainFlowerActivity" />
+                android:value="com.project.lili.fractalflower.MainFlowerActivity" />
         </activity>
+        <activity android:name="com.project.lili.fractalflower.TestAnimActivity"></activity>
     </application>
 
 </manifest>

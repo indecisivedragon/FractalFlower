@@ -1,4 +1,4 @@
-package com.example.lili.fractalflower;
+package com.project.lili.fractalflower;
 
 import android.graphics.Color;
 
@@ -60,12 +60,13 @@ public class FlowerFactory {
             int ringColor = Color.argb((int) (rgbArray[0]+increase *i), (int) (rgbArray[1]+increase*i), (int) (rgbArray[2]+increase*i), (int) (rgbArray[3]+increase*i));
             f.addRing(i*(0.5+0.25*(size-1)), numPetals, 0, ringColor, shape);
         }
+
         return f;
     }
 
     //from palest shade
     private static int[] getColorFromEnum(FlowerColor color) {
-        int[] tempColor = new int[4];
+        int[] tempColor;
 
         switch (color) {
             case PASTEL:
@@ -100,7 +101,7 @@ public class FlowerFactory {
      * @param r r base
      * @param g g base
      * @param b b base
-     * @return
+     * @return array that contains color in argb order
      */
     private static int[] setRandomColorArray(int range, int a, int r, int g, int b) {
         int[] colorShades = new int[4];
@@ -115,7 +116,7 @@ public class FlowerFactory {
      * returns random within range with base, bounds checking for color values 0 - 255
      * @param range range of shade
      * @param base a, r, g, b value to be passed in
-     * @return
+     * @return color as int as in Color class
      */
     private static int setRandomColor(int range, int base) {
         int color = range/2 - rand.nextInt(range) + base;
@@ -221,6 +222,6 @@ public class FlowerFactory {
 
 
     public enum FlowerColor {
-        PASTEL, PURPLE, YELLOW, PINK, BLUE, ORANGE;
+        PASTEL, PURPLE, YELLOW, PINK, BLUE, ORANGE
     }
 }

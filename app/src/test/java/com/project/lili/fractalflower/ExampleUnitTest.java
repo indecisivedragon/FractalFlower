@@ -1,4 +1,4 @@
-package com.example.lili.fractalflower;
+package com.project.lili.fractalflower;
 
 import org.junit.Test;
 
@@ -11,5 +11,11 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void changeSize() throws Exception {
+        FlowerFactory.setSize(3);
+        assertEquals(3, FlowerFactory.getSize());
     }
 }

@@ -12,7 +12,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.lili.fractalflower.MainFlowerActivity"
+    tools:context="com.project.lili.fractalflower.MainFlowerActivity"
     tools:showIn="@layout/activity_main_flower"
 
     android:id="@+id/main_flower_layout">
