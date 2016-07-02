@@ -29,13 +29,12 @@ public class TestAnimActivity extends AppCompatActivity {
             layout.addView(animView);
         }
 
+        //TODO does this really need to be a thread? because the run method is empty...
         animThread = new Thread(new AnimView(this.getApplicationContext()));
         animThread.start();
     }
 
     public void replayAnimation(View view) {
         animView.reset();
-
-        //new Thread(new AnimView(this.getApplicationContext())).start();
     }
 }

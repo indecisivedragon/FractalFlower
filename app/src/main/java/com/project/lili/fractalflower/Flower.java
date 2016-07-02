@@ -17,7 +17,10 @@ public class Flower {
     private ArrayList<Petal> petals = new ArrayList<>();
     private ArrayList<Ring> rings = new ArrayList<>();
 
+    //flower center
     private float locationX = 0, locationY = 0;
+    //for bounds checking when touching the flower
+    private double radius = 0;
 
     //centered overlap in petals is default off
     private boolean centerPetals = false;
@@ -84,6 +87,11 @@ public class Flower {
 
         Petal p = new Petal(shape);
         petals.add(p);
+
+        double newRadius = getRadius(r);
+        if (newRadius > radius) {
+            radius = newRadius;
+        }
     }
 
     //draws the flower on the canvas
@@ -200,6 +208,8 @@ public class Flower {
         return rings.get(level).color;
     }
 
+    //the following four methods refer to the individual petal bounds for each petal in each level
+    //they do not refer to the whole flower
     private int getLeft(int level) {
         return ((int) ((petals.get(level).left)*getScaled(level)));
     }
@@ -228,6 +238,7 @@ public class Flower {
         return Math.abs(this.getRight(i) - this.getLeft(i));
     }
 
+    //location X and location Y are the x, y coordinates of the flower center (whether centered or not)
     public float getLocationX() {
         return locationX;
     }
@@ -242,6 +253,24 @@ public class Flower {
 
     public void setLocationY(float y) {
         locationY = y;
+    }
+
+    private double getRadius (Ring r) {
+        return r.scale*width;
+    }
+
+    //check if coordinates (x, y) are within the flower radius
+    //I suppose I could do individual petals but that might be too much
+    public boolean checkBounds(float x, float y) {
+        if (this.getPointDistanceToCenter(x, y) <= radius) {
+            return true;
+        }
+        return false;
+    }
+
+    //get point distance to center
+    public double getPointDistanceToCenter(float x, float y) {
+        return Math.pow(Math.pow(x - locationX, 2) + Math.pow(y - locationY, 2), 0.5);
     }
 
     //sizes

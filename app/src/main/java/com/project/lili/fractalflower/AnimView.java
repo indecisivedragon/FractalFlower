@@ -7,8 +7,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.widget.Toast;
+
+import java.util.Iterator;
 
 /**
  * Created by Lili on 6/25/2016.
@@ -18,6 +22,12 @@ public class AnimView extends SurfaceView implements Runnable {
 
     private boolean setup = true;
     private Flower testFlower;
+
+    private String DEBUG_TAG = "fractal_flower debug: ";
+
+    //offset of touch point to center, so that flower can be dragged by petals
+    private float offsetX = 0, offsetY = 0;
+    private boolean move;
 
     AnimView (Context context) {
         super(context);
@@ -43,6 +53,7 @@ public class AnimView extends SurfaceView implements Runnable {
     }
 
     private void setTestFlower() {
+        //TODO whoops this resets everything on the main page also since I used flowerfactory
         testFlower = FlowerFactory.createFlower(4, true, FlowerFactory.FlowerColor.PASTEL);
         testFlower.setLocationX(this.getWidth()/2);
         testFlower.setLocationY(this.getHeight()/2);
@@ -68,7 +79,6 @@ public class AnimView extends SurfaceView implements Runnable {
         anim.start();
     }
 
-
     public void setSetup(boolean setup) {
         this.setup = setup;
     }
@@ -85,7 +95,7 @@ public class AnimView extends SurfaceView implements Runnable {
         float speed = (float) 2;
 
         ValueAnimator animX = ValueAnimator.ofFloat(testFlower.getLocationX(), dx);
-        animX.setDuration(2000);
+        animX.setDuration((long) (speed*distance));
         animX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animator) {
@@ -100,7 +110,7 @@ public class AnimView extends SurfaceView implements Runnable {
         });
 
         ValueAnimator animY = ValueAnimator.ofFloat(testFlower.getLocationY(), dy);
-        animY.setDuration((long) (2000));
+        animY.setDuration((long) (speed*distance));
         animY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animator) {
@@ -119,24 +129,66 @@ public class AnimView extends SurfaceView implements Runnable {
         set.start();
     }
 
+    private int mActivePointerId;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = MotionEventCompat.getActionMasked(event);
 
-        float x, y;
+        //coordinates of touch point
+        float x = event.getX();
+        float y = event.getY();
+
+        Log.d(DEBUG_TAG, MotionEvent.actionToString(action) +"(x: " + x + ", y: " + y + "), id " + mActivePointerId);
 
         switch (action) {
+            case (MotionEvent.ACTION_DOWN):
+                // Get the pointer ID of the first touch
+                mActivePointerId = event.getPointerId(0);
+
+                //check if the touch is on the flower
+                if (testFlower.checkBounds(event.getX(), event.getY())) {
+                    move = true;
+                    this.setOffsets(x, y);
+                }
+                //apparently this always needs to return true or nothing works
+                return true;
+            case (MotionEvent.ACTION_MOVE):
+                if (event.findPointerIndex(mActivePointerId) == 0) {
+                    //pick up if we touch the flower even if we start somewhere else
+                    if (testFlower.checkBounds(x, y) && !move) {
+                        move = true;
+                        this.setOffsets(x, y);
+                    }
+
+                    //only move if we're touching the flower
+                    if (move) {
+                        testFlower.setLocationX(x + offsetX);
+                        testFlower.setLocationY(y + offsetY);
+                    }
+                    Log.d(DEBUG_TAG, "" + move);
+                }
+                break;
+            case (MotionEvent.ACTION_UP):
+                move = false;
+                break;
+            case (MotionEvent.ACTION_CANCEL):
+                move = false;
+                break;
+            case (MotionEvent.ACTION_OUTSIDE):
+                move = false;
+                break;
             default:
-                x = event.getX();
-                y = event.getY();
-
-                //Toast t = Toast.makeText(this.getContext(), x + " " + y, Toast.LENGTH_SHORT);
-                //t.show();
-
-                this.setMoveCoordinates(x, y);
+                move = false;
                 break;
         }
+
         this.postInvalidate();
         return super.onTouchEvent(event);
+    }
+
+    private void setOffsets(float x, float y) {
+        offsetX = testFlower.getLocationX() - x;
+        offsetY = testFlower.getLocationY() - y;
     }
 }
