@@ -37,4 +37,8 @@ public class TestAnimActivity extends AppCompatActivity {
     public void replayAnimation(View view) {
         animView.reset();
     }
+
+    public void fadeColors(View view) {
+        animView.fade();
+    }
 }

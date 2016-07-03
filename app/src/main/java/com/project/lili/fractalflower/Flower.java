@@ -204,8 +204,16 @@ public class Flower {
         return rings.get(level).offset;
     }
 
-    private int getColor (int level) {
+    public int getColor (int level) {
         return rings.get(level).color;
+    }
+
+    //set alpha value for the color in that ring
+    public void setColorAlpha(int level, int alpha) {
+        int currentColor = rings.get(level).color;
+        int newColor = Color.argb(alpha, Color.red(currentColor), Color.green(currentColor), Color.blue(currentColor));
+
+        rings.get(level).color = newColor;
     }
 
     //the following four methods refer to the individual petal bounds for each petal in each level
@@ -287,6 +295,7 @@ public class Flower {
             this.scale = scale;
             this.numPetal = numPetal;
             this.offset = offset;
+            this.color = color;
             this.color = color;
         }
     }

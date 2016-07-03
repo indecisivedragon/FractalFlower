@@ -29,6 +29,9 @@ public class FlowerFactory {
     //don't forget color here even though it's defined above
     private static Flower.PetalShape shape = Flower.PetalShape.MEDIUM;
 
+    //apparently I need this to set the color
+    private static int[] colorShades = new int[4];
+
 
     FlowerFactory() {
 
@@ -104,7 +107,6 @@ public class FlowerFactory {
      * @return array that contains color in argb order
      */
     private static int[] setRandomColorArray(int range, int a, int r, int g, int b) {
-        int[] colorShades = new int[4];
         colorShades[0] = a;
         colorShades[1] = setRandomColor(range, r);
         colorShades[2] = setRandomColor(range, g);

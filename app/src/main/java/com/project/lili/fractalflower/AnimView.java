@@ -5,14 +5,14 @@ import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
+import android.graphics.Color;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
-import android.widget.Toast;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by Lili on 6/25/2016.
@@ -53,8 +53,7 @@ public class AnimView extends SurfaceView implements Runnable {
     }
 
     private void setTestFlower() {
-        //TODO whoops this resets everything on the main page also since I used flowerfactory
-        testFlower = FlowerFactory.createFlower(4, true, FlowerFactory.FlowerColor.PASTEL);
+        testFlower = FlowerFactory.createFlower(3, FlowerFactory.getCenterPetals(), FlowerFactory.getColor());
         testFlower.setLocationX(this.getWidth()/2);
         testFlower.setLocationY(this.getHeight()/2);
         setup = false;
@@ -129,6 +128,34 @@ public class AnimView extends SurfaceView implements Runnable {
         set.start();
     }
 
+    public void fade() {
+        AnimatorSet set = new AnimatorSet();
+
+        Collection<Animator> petalFadeAnimators = new ArrayList<>();
+        for (int i=0; i<testFlower.getLevels(); i++) {
+            int ringColorAlpha = Color.alpha(testFlower.getColor(i));
+
+            final ValueAnimator animColor = ValueAnimator.ofInt(ringColorAlpha, 0);
+            final int j = i;
+            animColor.setDuration((long) (10*ringColorAlpha));
+            animColor.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    if (!setup) {
+                        testFlower.setColorAlpha(j, (int) animator.getAnimatedValue());
+                        invalidate();
+                    }
+                    else {
+                        animator.cancel();
+                    }
+                }
+            });
+            petalFadeAnimators.add(animColor);
+        }
+        set.playTogether(petalFadeAnimators);
+        set.start();
+    }
+
     private int mActivePointerId;
 
     @Override
@@ -154,14 +181,14 @@ public class AnimView extends SurfaceView implements Runnable {
                 //apparently this always needs to return true or nothing works
                 return true;
             case (MotionEvent.ACTION_MOVE):
+                //only move if we started out touching the flower
                 if (event.findPointerIndex(mActivePointerId) == 0) {
                     //pick up if we touch the flower even if we start somewhere else
                     if (testFlower.checkBounds(x, y) && !move) {
                         move = true;
                         this.setOffsets(x, y);
                     }
-
-                    //only move if we're touching the flower
+                    //only move if we're continuing touching the flower
                     if (move) {
                         testFlower.setLocationX(x + offsetX);
                         testFlower.setLocationY(y + offsetY);
