@@ -200,7 +200,7 @@ public class Flower {
         return rings.get(level).numPetal;
     }
 
-    private int getOffset(int level) {
+    public int getOffset(int level) {
         return rings.get(level).offset;
     }
 
@@ -279,6 +279,10 @@ public class Flower {
     //get point distance to center
     public double getPointDistanceToCenter(float x, float y) {
         return Math.pow(Math.pow(x - locationX, 2) + Math.pow(y - locationY, 2), 0.5);
+    }
+
+    public void setOffset(int level, int o) {
+        rings.get(level).offset = o;
     }
 
     //sizes
