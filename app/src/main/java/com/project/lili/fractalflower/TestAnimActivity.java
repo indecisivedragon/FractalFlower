@@ -35,8 +35,8 @@ public class TestAnimActivity extends AppCompatActivity {
         }
 
         //TODO does this really need to be a thread? because the run method is empty...
-        animThread = new Thread(new AnimView(this.getApplicationContext()));
-        animThread.start();
+        //animThread = new Thread(new AnimView(this.getApplicationContext()));
+        //animThread.start();
 
         //Thread secondThread = new Thread((new AnimView((this.getApplicationContext()))));
         //secondThread.start();

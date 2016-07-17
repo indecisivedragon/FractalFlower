@@ -114,23 +114,17 @@ public class Flower {
             float yShift = flower.getOvalHeight(i)/2;
 
             canvas.save();
-            canvas.rotate(offset);
             //draw the ring
             for (int j=0; j<numPetal; j++) {
-                oval.draw(canvas);
-                //check centering and align petals if needed
-                //move oval up to center
-                if (flower.centerPetals) {
-                    canvas.translate(0, yShift);
-                }
-                //turn around center
-                canvas.rotate((float) (angle));
-                //move oval back down for next petal
+                canvas.save();
+                canvas.rotate(offset);
+                canvas.rotate((float) (angle*j));
                 if (flower.centerPetals) {
                     canvas.translate(0, -yShift);
                 }
+                oval.draw(canvas);
+                canvas.restore();
             }
-            canvas.restore();
 
             //center ring centers if centerpetals is on
             //shift up so that next yShift will be correct (but don't do this for last level
@@ -138,6 +132,7 @@ public class Flower {
                 float diff = yShift - flower.getOvalHeight(i+1)/2;
                 canvas.translate(0, diff);
             }
+            canvas.restore();
         }
         canvas.restore();
     }

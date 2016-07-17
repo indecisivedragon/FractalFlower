@@ -24,7 +24,8 @@ import java.util.Collection;
  * Created by Lili on 6/25/2016.
  *
  */
-public class AnimView extends SurfaceView implements Runnable {
+//public class AnimView extends SurfaceView implements Runnable {
+public class AnimView extends SurfaceView {
 
     private static final int FADE_STOPPED = 0;
     private static final int FADE_TO_WHITE = 1;
@@ -56,10 +57,12 @@ public class AnimView extends SurfaceView implements Runnable {
         Flower.drawFlower(c, testFlower);
     }
 
+    /*
     @Override
     public void run() {
         System.out.println("I'm running!" + Thread.currentThread().getId());
     }
+    */
 
     public void reset() {
         this.setSetup(true);
