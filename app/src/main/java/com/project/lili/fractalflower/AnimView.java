@@ -37,6 +37,7 @@ public class AnimView extends SurfaceView {
     //offset of touch point to center, so that flower can be dragged by petals
     private float offsetX = 0, offsetY = 0;
     private boolean move;
+
     //fade animation variables
     //are we fading or not
     private int fadeState = 0;
@@ -149,12 +150,15 @@ public class AnimView extends SurfaceView {
         set.start();
     }
 
+    //TODO at some point i should clean up this disaster
     public void fade() {
         fadeState = (fadeState + 1) % 4;
+        /*
         System.out.println(fadeState);
         if (fadeState == FADE_STOPPED || fadeState == FADE_REVERSE_STOPPED) {
             return;
         }
+        */
 
         Collection<Animator> petalFadeAnimators = new ArrayList<>();
         for (int i = 0; i < testFlower.getLevels(); i++) {
@@ -166,7 +170,20 @@ public class AnimView extends SurfaceView {
             ValueAnimator animColor = null;
             //animColor.setDuration((long) (10*ringColorAlpha));
 
-            if (fadeState == FADE_TO_WHITE) {
+            if (fadeState == FADE_STOPPED && ringColorAlpha == 0) {
+                fadeState = FADE_REVERSE;
+            }
+            else if (fadeState == FADE_REVERSE_STOPPED && ringColorAlpha == ringColorAlphaArray[i]) {
+                fadeState = FADE_TO_WHITE;
+            }
+            else if (fadeState == FADE_STOPPED) {
+                fadeState += 1;
+            }
+            else if (fadeState == FADE_REVERSE_STOPPED) {
+                fadeState +=1;
+            }
+
+            if (fadeState == FADE_TO_WHITE && ringColorAlpha != 0) {
                 System.out.println("fade to white");
                 //we want to go from the current alpha to 0
                 animColor = ValueAnimator.ofInt(ringColorAlpha, 0);
@@ -182,7 +199,8 @@ public class AnimView extends SurfaceView {
                         invalidate();
                     }
                 });
-            } else if (fadeState == FADE_REVERSE) {
+            }
+            if (fadeState == FADE_REVERSE && ringColorAlpha != ringColorAlphaArray[i]) {
                 System.out.println("reverse fade");
                 //go from current shade to original
                 animColor = ValueAnimator.ofInt(ringColorAlpha, ringColorAlphaArray[j]);
@@ -332,10 +350,6 @@ public class AnimView extends SurfaceView {
 
     //turn flower once
     public void rotate() {
-        //otherwise the rings move away from each other
-        final float startX = testFlower.getLocationX();
-        final float startY = testFlower.getLocationY();
-
         //animator set to be played
         Collection<Animator> rotateAnimators = new ArrayList<>();
 
@@ -354,10 +368,6 @@ public class AnimView extends SurfaceView {
                 public void onAnimationUpdate(ValueAnimator animator) {
                     if (!setup) {
                         testFlower.setOffset(j, (int) animator.getAnimatedValue());
-
-                        //maintain center
-                        testFlower.setLocationX(startX);
-                        testFlower.setLocationY(startY);
                     } else {
                         animator.cancel();
                     }
