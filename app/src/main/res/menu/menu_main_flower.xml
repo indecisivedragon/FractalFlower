@@ -13,4 +13,9 @@
         android:id="@+id/action_test_anim"
         android:title="@string/action_test_anim"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_start_game"
+        android:title="@string/action_start_game"
+        app:showAsAction="never" />
 </menu>

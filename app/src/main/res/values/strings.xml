@@ -6,6 +6,8 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_test_anim">Test Animation</string>
+    <string name="action_start_game">Start Game</string>
+
     <string name="replay_animation">Reset</string>
 
     <string name="title_activity_display_settings">DisplaySettingsActivity</string>
@@ -25,4 +27,5 @@
     <string name="setSmallFlowerText">Small</string>
     <string name="setMediumFlowerText">Medium</string>
     <string name="setLargeFlowerText">Large</string>
+    <string name="title_activity_start_game">StartGameActivity</string>
 </resources>

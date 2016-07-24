@@ -44,7 +44,7 @@ public class AnimView extends SurfaceView {
     private int[] ringColorAlphaArray;
     private int mActivePointerId;
 
-    AnimView(Context context) {
+    public AnimView(Context context) {
         super(context);
     }
 

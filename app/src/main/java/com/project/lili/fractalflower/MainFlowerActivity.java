@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import com.project.lili.fractalflower.gameMode.StartGameActivity;
+
 public class MainFlowerActivity extends AppCompatActivity {
 
     private FlowerView flowerView;
@@ -61,6 +63,10 @@ public class MainFlowerActivity extends AppCompatActivity {
             showAnimationPage();
         }
 
+        if (id == R.id.action_start_game) {
+            startGame();
+        }
+
         return super.onOptionsItemSelected(item);
 
         //TODO add menu things
@@ -91,6 +97,11 @@ public class MainFlowerActivity extends AppCompatActivity {
      */
     private void showAnimationPage() {
         Intent intent = new Intent(this, TestAnimActivity.class);
+        startActivity(intent);
+    }
+
+    private void startGame() {
+        Intent intent = new Intent(this, StartGameActivity.class);
         startActivity(intent);
     }
 
