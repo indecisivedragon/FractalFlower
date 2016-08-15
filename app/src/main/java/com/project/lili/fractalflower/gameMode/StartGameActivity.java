@@ -2,13 +2,17 @@ package com.project.lili.fractalflower.gameMode;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -18,7 +22,10 @@ import com.project.lili.fractalflower.R;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
-public class StartGameActivity extends AppCompatActivity {
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+
+public class StartGameActivity extends AppCompatActivity implements LevelTrackFragment.OnFragmentInteractionListener, LevelScreenFragment.OnFragmentInteractionListener {
 
     private AnimView animView;
     private String filename = "data_file.txt";
@@ -40,10 +47,33 @@ public class StartGameActivity extends AppCompatActivity {
         });
 
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.start_game_layout);
-        animView = new AnimView(this);
-        animView.setBackgroundColor(Color.WHITE);
+        //AnimView animView = new AnimView(this);
+        //animView.setBackgroundColor(Color.GRAY);
 
-        layout.addView(animView);
+        //layout.addView(animView);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        LevelTrackFragment hello = new LevelTrackFragment();
+        fragmentTransaction.add(R.id.fragment_level_track, hello, "fragment_level_track");
+        //fragmentTransaction.replace(R.id.A, hello);
+
+        //this is to get the height and width of the display scree nso that it displays properly
+        //i can't believe this was so much trouble
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        LevelScreenFragment screen = LevelScreenFragment.newInstance(height, width);
+        System.out.println("layout: height " + height + ", width " + width);
+        fragmentTransaction.add(R.id.fragment_level_screen, screen, "fragment_level_screen");
+        //fragmentTransaction.replace(R.id.B, screen);
+
+        fragmentTransaction.commit();
+        getSupportFragmentManager().executePendingTransactions();
     }
 
     public void writeFile(View view) {
@@ -101,4 +131,13 @@ public class StartGameActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        System.out.println("hi");
+    }
+
+    @Override
+    public void onFragmentStart() {
+        System.out.println("fragment start");
+    }
 }

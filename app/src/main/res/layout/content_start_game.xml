@@ -15,32 +15,58 @@
     android:id="@+id/start_game_layout"
     >
 
-    <Button
-        android:layout_width="wrap_content"
+    <!--
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Write File"
+            android:id="@+id/button_write_file"
+            android:onClick="writeFile"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Read File"
+            android:id="@+id/button_read_file"
+            android:onClick="readFile"
+            android:layout_below="@+id/button_write_file"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear File"
+            android:id="@+id/button_clear_file"
+            android:onClick="clearFile"
+            android:layout_below="@+id/button_read_file"
+            android:layout_centerHorizontal="true" />
+
+
+        <fragment
+            android:id="@+id/details_fragment"
+            class="com.project.lili.fractalflower.gameMode.LevelTrackFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        -->
+
+    <FrameLayout
+        android:id="@+id/fragment_level_track"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Write File"
-        android:id="@+id/button_write_file"
-        android:onClick="writeFile"
+        android:orientation="vertical"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        >
+    </FrameLayout>
 
-    <Button
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id="@+id/fragment_level_screen"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Read File"
-        android:id="@+id/button_read_file"
-        android:onClick="readFile"
-        android:layout_below="@+id/button_write_file"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Clear File"
-        android:id="@+id/button_clear_file"
-        android:onClick="clearFile"
-        android:layout_below="@+id/button_read_file"
-        android:layout_centerHorizontal="true" />
-
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        >
+    </FrameLayout>
 
 </RelativeLayout>

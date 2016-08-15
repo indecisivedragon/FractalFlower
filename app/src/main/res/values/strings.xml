@@ -28,4 +28,7 @@
     <string name="setMediumFlowerText">Medium</string>
     <string name="setLargeFlowerText">Large</string>
     <string name="title_activity_start_game">StartGameActivity</string>
+
+    <string name="hello_blank_fragment_1">fragment level track</string>
+    <string name="hello_blank_fragment_2">fragment level screen</string>
 </resources>
