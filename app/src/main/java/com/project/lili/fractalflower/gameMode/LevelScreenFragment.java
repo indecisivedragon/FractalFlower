@@ -5,12 +5,16 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.project.lili.fractalflower.AnimView;
+import com.project.lili.fractalflower.FlowerView;
 import com.project.lili.fractalflower.R;
 
 /**
@@ -22,14 +26,16 @@ import com.project.lili.fractalflower.R;
  * create an instance of this fragment.
  */
 public class LevelScreenFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    //take in height and width of screen
     private static final String ARG_PARAM1 = "height";
     private static final String ARG_PARAM2 = "width";
+    private static final String ARG_PARAM3= "rotation";
 
-    // TODO: Rename and change types of parameters
     private int height;
     private int width;
+    private int rotation;
+
+    private GameView gameView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -45,14 +51,12 @@ public class LevelScreenFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment LevelScreenFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static LevelScreenFragment newInstance(int param1, int param2) {
+    public static LevelScreenFragment newInstance(int param1, int param2, int rotation) {
         LevelScreenFragment fragment = new LevelScreenFragment();
         Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
         args.putInt(ARG_PARAM1, param1);
         args.putInt(ARG_PARAM2, param2);
+        args.putInt(ARG_PARAM3, rotation);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,6 +67,7 @@ public class LevelScreenFragment extends Fragment {
         if (getArguments() != null) {
             height = getArguments().getInt(ARG_PARAM1);
             width = getArguments().getInt(ARG_PARAM2);
+            rotation = getArguments().getInt(ARG_PARAM3);
         }
 
         System.out.println("level screen fragment created");
@@ -76,20 +81,28 @@ public class LevelScreenFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_level_screen, container, false);
 
         FrameLayout layout = (FrameLayout) view.findViewById(R.id.level_screen_layout);
-        ViewGroup.LayoutParams params = layout.getLayoutParams();
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) layout.getLayoutParams();
 
-        System.out.println("height " + height + ", width " + width);
-
-        params.height = height/2;
-        params.width = width;
+        if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
+            params.height = height/2;
+            params.width = width;
+        }
+        else if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
+            params.height = height;
+            params.width = width/2;
+            params.gravity = Gravity.END;
+        }
         layout.setLayoutParams(params);
 
-        AnimView animView = new AnimView(this.getContext());
-        animView.setBackgroundColor(Color.GRAY);
-        layout.addView(animView);
+        System.out.println("level screen fragment input: height " + params.height + ", width " + params.width + ", rotation " + rotation);
+
+        gameView = new GameView(this.getContext());
+        gameView.setBackgroundColor(Color.GRAY);
+        gameView.setBounds(params.height, params.width);
+        //gameView.invalidate();
+        layout.addView(gameView);
 
         return view;
-
         //return inflater.inflate(R.layout.fragment_level_screen, container, false);
     }
 
@@ -115,6 +128,12 @@ public class LevelScreenFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void resetGameScreen() {
+        System.out.println("Reset Game Screen");
+        gameView.resetScreen(true);
+        gameView.invalidate();
     }
 
     /**
