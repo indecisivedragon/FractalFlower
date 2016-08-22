@@ -33,7 +33,7 @@ public class FlowerView extends SurfaceView {
     private ArrayList<Flower> flowers = new ArrayList<Flower>();
 
 
-    FlowerView(Context context) {
+    public FlowerView(Context context) {
         super(context);
     }
 

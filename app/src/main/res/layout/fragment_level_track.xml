@@ -14,8 +14,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
+        android:text="reset"
+        android:id="@+id/game_reset_button"
+        android:onClick="gameReset"
         android:layout_gravity="left|top" />
 
 </FrameLayout>

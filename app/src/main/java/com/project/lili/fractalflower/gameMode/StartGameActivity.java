@@ -1,18 +1,18 @@
 package com.project.lili.fractalflower.gameMode;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
+import android.view.Surface;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -21,6 +21,7 @@ import com.project.lili.fractalflower.R;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.logging.Level;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -29,6 +30,8 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
 
     private AnimView animView;
     private String filename = "data_file.txt";
+
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,31 +49,54 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
             }
         });
 
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.start_game_layout);
-        //AnimView animView = new AnimView(this);
-        //animView.setBackgroundColor(Color.GRAY);
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.start_game_layout_vertical);
 
-        //layout.addView(animView);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        LevelTrackFragment hello = new LevelTrackFragment();
-        fragmentTransaction.add(R.id.fragment_level_track, hello, "fragment_level_track");
-        //fragmentTransaction.replace(R.id.A, hello);
 
-        //this is to get the height and width of the display scree nso that it displays properly
+        //this is to get the height and width of the display screen so that it displays properly
         //i can't believe this was so much trouble
         Display display = getWindowManager().getDefaultDisplay();
+        int rotation = display.getRotation();
+
         Point size = new Point();
         display.getSize(size);
+        //default sizes, to be changed
         int width = size.x;
         int height = size.y;
 
-        LevelScreenFragment screen = LevelScreenFragment.newInstance(height, width);
+    /*
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
+        int height = params.height;
+        int width = params.width;
+*/
+
+        if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
+            width = size.x;
+            height = size.y;
+        }
+        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
+            width = size.x;
+            height = size.y;
+        }
+
+        LevelScreenFragment screen = LevelScreenFragment.newInstance(height, width, rotation);
         System.out.println("layout: height " + height + ", width " + width);
-        fragmentTransaction.add(R.id.fragment_level_screen, screen, "fragment_level_screen");
-        //fragmentTransaction.replace(R.id.B, screen);
+
+        //fragmentTransaction.add(R.id.fragment_level_screen, screen, "fragment_level_screen");
+        fragmentTransaction.replace(R.id.fragment_level_screen, screen);
+
+        LevelTrackFragment trackFragment = LevelTrackFragment.newInstance(height, width, rotation);
+        //fragmentTransaction.add(R.id.fragment_level_track, hello, "fragment_level_track");
+        fragmentTransaction.replace(R.id.fragment_level_track, trackFragment);
+
+        /*
+        int thing = R.id.fragment_level_screen;
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.findViewById(thing).getLayoutParams();
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        layout.findViewById(thing).setLayoutParams(params);
+        */
 
         fragmentTransaction.commit();
         getSupportFragmentManager().executePendingTransactions();
@@ -140,4 +166,16 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
     public void onFragmentStart() {
         System.out.println("fragment start");
     }
+
+    public void gameReset(View view) {
+        Toast t = Toast.makeText(this.getApplicationContext(), "game reset button here", Toast.LENGTH_SHORT);
+        t.show();
+
+        LevelScreenFragment levelScreenFragment = (LevelScreenFragment) fragmentManager.findFragmentById(R.id.fragment_level_screen);
+        if (levelScreenFragment != null) {
+            levelScreenFragment.resetGameScreen();
+        }
+    }
+
 }
+

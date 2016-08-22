@@ -12,7 +12,7 @@
     tools:context="com.project.lili.fractalflower.gameMode.StartGameActivity"
     tools:showIn="@layout/activity_start_game"
 
-    android:id="@+id/start_game_layout"
+    android:id="@+id/start_game_layout_horizontal"
     >
 
     <!--
@@ -57,6 +57,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
         >
     </FrameLayout>
 
@@ -65,7 +66,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         >
     </FrameLayout>
 
