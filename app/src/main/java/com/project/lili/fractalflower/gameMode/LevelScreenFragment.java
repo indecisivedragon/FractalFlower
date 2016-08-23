@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.project.lili.fractalflower.AnimView;
-import com.project.lili.fractalflower.FlowerView;
 import com.project.lili.fractalflower.R;
 
 /**
@@ -27,9 +25,9 @@ import com.project.lili.fractalflower.R;
  */
 public class LevelScreenFragment extends Fragment {
     //take in height and width of screen
-    private static final String ARG_PARAM1 = "height";
-    private static final String ARG_PARAM2 = "width";
-    private static final String ARG_PARAM3= "rotation";
+    private static final String SCREEN_HEIGHT = "height";
+    private static final String SCREEN_WIDTH = "width";
+    private static final String SCREEN_ROTATION = "rotation";
 
     private int height;
     private int width;
@@ -47,16 +45,17 @@ public class LevelScreenFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param height the height of the total screen
+     * @param width the width of the total screen
+     * @param rotation the screen orientation
      * @return A new instance of fragment LevelScreenFragment.
      */
-    public static LevelScreenFragment newInstance(int param1, int param2, int rotation) {
+    public static LevelScreenFragment newInstance(int height, int width, int rotation) {
         LevelScreenFragment fragment = new LevelScreenFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, param1);
-        args.putInt(ARG_PARAM2, param2);
-        args.putInt(ARG_PARAM3, rotation);
+        args.putInt(SCREEN_HEIGHT, height);
+        args.putInt(SCREEN_WIDTH, width);
+        args.putInt(SCREEN_ROTATION, rotation);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,9 +64,9 @@ public class LevelScreenFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            height = getArguments().getInt(ARG_PARAM1);
-            width = getArguments().getInt(ARG_PARAM2);
-            rotation = getArguments().getInt(ARG_PARAM3);
+            height = getArguments().getInt(SCREEN_HEIGHT);
+            width = getArguments().getInt(SCREEN_WIDTH);
+            rotation = getArguments().getInt(SCREEN_ROTATION);
         }
 
         System.out.println("level screen fragment created");
@@ -83,12 +82,14 @@ public class LevelScreenFragment extends Fragment {
         FrameLayout layout = (FrameLayout) view.findViewById(R.id.level_screen_layout);
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) layout.getLayoutParams();
 
+        //depending on orientation, resize the screen
         if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
             params.height = height/2;
-            params.width = width;
+            params.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+            params.gravity = Gravity.BOTTOM;
         }
         else if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
-            params.height = height;
+            params.height = RelativeLayout.LayoutParams.MATCH_PARENT;
             params.width = width/2;
             params.gravity = Gravity.END;
         }
@@ -98,8 +99,6 @@ public class LevelScreenFragment extends Fragment {
 
         gameView = new GameView(this.getContext());
         gameView.setBackgroundColor(Color.GRAY);
-        gameView.setBounds(params.height, params.width);
-        //gameView.invalidate();
         layout.addView(gameView);
 
         return view;
@@ -130,8 +129,9 @@ public class LevelScreenFragment extends Fragment {
         mListener = null;
     }
 
-    public void resetGameScreen() {
+    public void resetGameScreen(int height, int width) {
         System.out.println("Reset Game Screen");
+        gameView.setBounds(height, width);
         gameView.resetScreen(true);
         gameView.invalidate();
     }
@@ -151,5 +151,9 @@ public class LevelScreenFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
 
         void onFragmentStart();
+    }
+
+    public GameView getGameView() {
+        return gameView;
     }
 }

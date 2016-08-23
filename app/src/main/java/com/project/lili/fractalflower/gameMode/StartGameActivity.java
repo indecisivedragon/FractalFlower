@@ -2,13 +2,17 @@ package com.project.lili.fractalflower.gameMode;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +25,22 @@ import com.project.lili.fractalflower.R;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.logging.Level;
+import java.util.logging.StreamHandler;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 public class StartGameActivity extends AppCompatActivity implements LevelTrackFragment.OnFragmentInteractionListener, LevelScreenFragment.OnFragmentInteractionListener {
 
-    private AnimView animView;
     private String filename = "data_file.txt";
 
     private FragmentManager fragmentManager;
+
+    private int mActivePointerId;
+
+    private String DEBUG_TAG = "game activity screen";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +72,8 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
         Point size = new Point();
         display.getSize(size);
         //default sizes, to be changed
-        int width = size.x;
         int height = size.y;
+        int width = size.x;
 
     /*
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
@@ -72,23 +81,11 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
         int width = params.width;
 */
 
-        if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
-            width = size.x;
-            height = size.y;
-        }
-        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
-            width = size.x;
-            height = size.y;
-        }
-
         LevelScreenFragment screen = LevelScreenFragment.newInstance(height, width, rotation);
         System.out.println("layout: height " + height + ", width " + width);
-
-        //fragmentTransaction.add(R.id.fragment_level_screen, screen, "fragment_level_screen");
         fragmentTransaction.replace(R.id.fragment_level_screen, screen);
 
         LevelTrackFragment trackFragment = LevelTrackFragment.newInstance(height, width, rotation);
-        //fragmentTransaction.add(R.id.fragment_level_track, hello, "fragment_level_track");
         fragmentTransaction.replace(R.id.fragment_level_track, trackFragment);
 
         /*
@@ -171,11 +168,11 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
         Toast t = Toast.makeText(this.getApplicationContext(), "game reset button here", Toast.LENGTH_SHORT);
         t.show();
 
+        //game screen is same size as before
         LevelScreenFragment levelScreenFragment = (LevelScreenFragment) fragmentManager.findFragmentById(R.id.fragment_level_screen);
-        if (levelScreenFragment != null) {
-            levelScreenFragment.resetGameScreen();
-        }
+        int levelHeight = levelScreenFragment.getGameView().getHeight();
+        int levelWidth = levelScreenFragment.getGameView().getWidth();
+        levelScreenFragment.resetGameScreen(levelHeight, levelWidth);
     }
-
 }
 
