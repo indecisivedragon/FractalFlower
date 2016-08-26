@@ -8,16 +8,19 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.project.lili.fractalflower.AnimView;
@@ -32,7 +35,7 @@ import java.util.logging.StreamHandler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-public class StartGameActivity extends AppCompatActivity implements LevelTrackFragment.OnFragmentInteractionListener, LevelScreenFragment.OnFragmentInteractionListener {
+public class StartGameActivity extends AppCompatActivity implements LevelTrackFragment.OnFragmentInteractionListener, LevelScreenFragment.OnFragmentInteractionListener, GameView.onRefreshListener {
 
     private String filename = "data_file.txt";
 
@@ -42,21 +45,15 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
 
     private String DEBUG_TAG = "game activity screen";
 
+    private String toDisplay = "...";
+    private TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.start_game_layout_vertical);
 
@@ -97,6 +94,8 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
 
         fragmentTransaction.commit();
         getSupportFragmentManager().executePendingTransactions();
+
+        textView = (TextView) findViewById(R.id.text_to_display);
     }
 
     public void writeFile(View view) {
@@ -164,6 +163,13 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
         System.out.println("fragment start");
     }
 
+    @Override
+    public void onLevelScreenChange(String s) {
+        Toast t = Toast.makeText(this.getApplicationContext(), s, Toast.LENGTH_SHORT);
+        t.setGravity(Gravity.CENTER, 0, 0);
+        t.show();
+    }
+
     public void gameReset(View view) {
         Toast t = Toast.makeText(this.getApplicationContext(), "game reset button here", Toast.LENGTH_SHORT);
         t.show();
@@ -173,6 +179,13 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
         int levelHeight = levelScreenFragment.getGameView().getHeight();
         int levelWidth = levelScreenFragment.getGameView().getWidth();
         levelScreenFragment.resetGameScreen(levelHeight, levelWidth);
+    }
+
+    @Override
+    public void onRefresh(String s) {
+        System.out.println(s);
+        toDisplay = s;
+        textView.setText(toDisplay);
     }
 }
 

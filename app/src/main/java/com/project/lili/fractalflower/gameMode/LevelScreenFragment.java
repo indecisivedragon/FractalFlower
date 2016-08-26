@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.project.lili.fractalflower.R;
 
@@ -134,6 +135,8 @@ public class LevelScreenFragment extends Fragment {
         gameView.setBounds(height, width);
         gameView.resetScreen(true);
         gameView.invalidate();
+
+        mListener.onLevelScreenChange(gameView.getGameStatus());
     }
 
     /**
@@ -151,6 +154,8 @@ public class LevelScreenFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
 
         void onFragmentStart();
+
+        void onLevelScreenChange(String s);
     }
 
     public GameView getGameView() {

@@ -51,6 +51,12 @@
             android:layout_height="match_parent"/>
         -->
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:id="@+id/text_to_display"/>
+
     <FrameLayout
         android:id="@+id/fragment_level_track"
         android:layout_width="fill_parent"
