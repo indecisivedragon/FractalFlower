@@ -12,12 +12,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 public class TestAnimActivity extends AppCompatActivity {
 
     private AnimView animView;
-    private Thread animThread;
 
     private static final String DEBUG_TAG = "Gestures";
+
+    private Tracker mTracker;
+    private String TAG = "analytics";
+    private String name = "TestAnimActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +41,9 @@ public class TestAnimActivity extends AppCompatActivity {
             layout.addView(animView);
         }
 
-        //TODO does this really need to be a thread? because the run method is empty...
-        //animThread = new Thread(new AnimView(this.getApplicationContext()));
-        //animThread.start();
-
-        //Thread secondThread = new Thread((new AnimView((this.getApplicationContext()))));
-        //secondThread.start();
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     public void replayAnimation(View view) {
@@ -99,4 +102,12 @@ public class TestAnimActivity extends AppCompatActivity {
         return true;
     }
     */
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "Setting screen name: " + name);
+        mTracker.setScreenName("Image~" + name);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
 }

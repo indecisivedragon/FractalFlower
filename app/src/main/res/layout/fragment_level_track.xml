@@ -6,17 +6,30 @@
     android:id="@+id/fragment_level_track_id"
     >
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment_1" />
-
-    <Button
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="reset"
-        android:id="@+id/game_reset_button"
-        android:onClick="gameReset"
-        android:layout_gravity="left|top" />
+        android:id="@+id/fragment_level_track_relative_layout">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_blank_fragment_1"
+            android:id="@+id/level_track_notice"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/display_status_string"
+            android:layout_below="@id/level_track_notice"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/level_track_reset"
+            android:id="@+id/game_reset_button"
+            android:onClick="gameReset"
+            android:layout_below="@id/display_status_string"
+            />
+    </RelativeLayout>
 
 </FrameLayout>

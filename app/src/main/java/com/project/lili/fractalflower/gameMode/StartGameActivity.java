@@ -2,35 +2,21 @@ package com.project.lili.fractalflower.gameMode;
 
 import android.content.Context;
 import android.graphics.Point;
-import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.Surface;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.project.lili.fractalflower.AnimView;
 import com.project.lili.fractalflower.R;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.StreamHandler;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -44,9 +30,6 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
     private int mActivePointerId;
 
     private String DEBUG_TAG = "game activity screen";
-
-    private String toDisplay = "...";
-    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +77,6 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
 
         fragmentTransaction.commit();
         getSupportFragmentManager().executePendingTransactions();
-
-        textView = (TextView) findViewById(R.id.text_to_display);
     }
 
     public void writeFile(View view) {
@@ -168,6 +149,8 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
         Toast t = Toast.makeText(this.getApplicationContext(), s, Toast.LENGTH_SHORT);
         t.setGravity(Gravity.CENTER, 0, 0);
         t.show();
+
+        setStatusUpdate(s);
     }
 
     public void gameReset(View view) {
@@ -181,11 +164,20 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
         levelScreenFragment.resetGameScreen(levelHeight, levelWidth);
     }
 
+    //level screen sends game status
     @Override
     public void onRefresh(String s) {
-        System.out.println(s);
-        toDisplay = s;
-        textView.setText(toDisplay);
+        Log.d(DEBUG_TAG, "string received from level screen: " + s);
+        setStatusUpdate(s);
+    }
+
+    @Override
+    public void setStatusUpdate(String s) {
+        Log.d(DEBUG_TAG, "status update is being passed to level track fragment: " + s);
+        LevelTrackFragment levelTrackFragment = (LevelTrackFragment) fragmentManager.findFragmentById(R.id.fragment_level_track);
+        if (levelTrackFragment != null) {
+            levelTrackFragment.setUpdateStatus(s);
+        }
     }
 }
 

@@ -164,9 +164,17 @@ public class GameView extends SurfaceView {
         for (int i = 0; i < numCircles*numCircles; i++) {
             float xCenter = circleCoordinates[i][0];
             float yCenter = circleCoordinates[i][1];
+            //make sure we are within a circle
             if (isInRadius(x, y, xCenter, yCenter)) {
-                Log.d(GAME_DEBUG, "coordinates valid at circle " + i);
-                return i;
+                //make sure it is an empty circle
+                if (connectFour.getBoard()[i/numCircles][i%numCircles] == 0) {
+                    Log.d(GAME_DEBUG, "coordinates valid at circle " + i);
+                    return i;
+                }
+                else {
+                    Log.d(GAME_DEBUG, "circle already has a move");
+                    return -1;
+                }
             }
         }
         Log.d(GAME_DEBUG, "coordinates not valid");
@@ -193,19 +201,28 @@ public class GameView extends SurfaceView {
 
         Log.d(GAME_DEBUG, MotionEvent.actionToString(action) + "(x: " + x + ", y: " + y + "), id " + mActivePointerId);
 
-        if (waitForHuman) {
             switch (action) {
                 case (MotionEvent.ACTION_DOWN):
                     // Get the pointer ID of the first touch
                     mActivePointerId = event.getPointerId(0);
-                    Log.d(GAME_DEBUG, " " + coordinatesValid(x, y));
+
+                    //if coordinates are indeed valid, we can proceed, otherwise not
+                    int circle = coordinatesValid(x, y);
+                    if (circle != -1 && waitForHuman) {
+                        connectFour.makeMove(circle);
+                        waitForHuman = false;
+                    }
+                    else if (!waitForHuman) {
+                        connectFour.makeAIMove();
+                        waitForHuman = true;
+                    }
+
                     //apparently this always needs to return true or nothing works
                     return true;
                 case (MotionEvent.ACTION_MOVE):
                     break;
                 case (MotionEvent.ACTION_UP):
                     mActivePointerId = -1;
-                    this.invalidate();
                     break;
                 case (MotionEvent.ACTION_CANCEL):
                     break;
@@ -214,18 +231,6 @@ public class GameView extends SurfaceView {
                 default:
                     break;
             }
-
-            //if coordinates are indeed valid, we can proceed, otherwise not
-            int circle = coordinatesValid(x, y);
-            if (circle != -1) {
-                connectFour.makeMove(circle);
-                waitForHuman = false;
-            }
-        }
-        else {
-                connectFour.makeAIMove();
-                waitForHuman = true;
-        }
 
         onRefreshListener.onRefresh(getGameStatus());
         this.invalidate();

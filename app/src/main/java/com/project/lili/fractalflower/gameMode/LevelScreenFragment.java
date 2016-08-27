@@ -71,6 +71,8 @@ public class LevelScreenFragment extends Fragment {
         }
 
         System.out.println("level screen fragment created");
+
+        mListener.onFragmentStart();
     }
 
     @Override
